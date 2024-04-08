@@ -92,21 +92,28 @@ def decision():
             if (num > max_num):
                 max_num = num
                 max_index=[i,j]
-    answer+=max_num
     return max_index
 
 #제초제 뿌림
 def sprinkle(x,y):
     global answer
-    #answer+=input_arr[x][y]
+    answer+=input_arr[x][y]
     input_arr[x][y]=-c
+    block_m=[]
     for _n in range(1, k+1):
         for _m in range(4):
             _x = x+(nx[_m]*_n)
             _y = y+(ny[_m]*_n)
-            if (_x >=0 and _y >= 0 and _x <n and _y < n and input_arr[_x][_y] >=0):
-                #answer+=input_arr[_x][_y]
-                input_arr[_x][_y] =-c
+            if(_m in block_m):
+                continue;
+            if (_x >=0 and _y >= 0 and _x <n and _y < n):
+                if(input_arr[_x][_y] <= 0):
+                    #막힘 -> 전파되지 않음
+                    block_m.append(_m)
+                if(input_arr[_x][_y] >0):
+                    answer+=input_arr[_x][_y]
+                    input_arr[_x][_y] = -c
+
 
 for _ in range(m):
     grow()
