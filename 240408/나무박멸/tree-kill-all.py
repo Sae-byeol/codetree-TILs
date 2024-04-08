@@ -109,6 +109,7 @@ def sprinkle(x,y):
             if (_x >=0 and _y >= 0 and _x <n and _y < n):
                 if(input_arr[_x][_y] <= 0):
                     #막힘 -> 전파되지 않음
+                    input_arr[_x][_y] = -c
                     block_m.append(_m)
                 if(input_arr[_x][_y] >0):
                     answer+=input_arr[_x][_y]
