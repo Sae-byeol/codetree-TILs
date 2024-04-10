@@ -85,9 +85,13 @@ def interact(santa_num, x,y, direction_x, direction_y):
     prev_santa=game_table[x][y]
     _x=x+direction_x
     _y=y+direction_y
-    if (game_table[_x][_y] >0):
+
+    if (not is_out_range(_x, _y) and game_table[_x][_y] >0):
         #미는 곳에도 산타가 있다면
         interact(prev_santa, _x, _y, direction_x, direction_y)
+    if(is_out_range(_x, _y)):
+        game_table[x][y] = santa_num
+        return;
     else:
         game_table[_x][_y] = prev_santa
         game_table[x][y] = santa_num
