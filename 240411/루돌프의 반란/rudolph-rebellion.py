@@ -9,6 +9,7 @@ game_table[input_x][input_y] =-1 #사슴은 -1로 표시
 deer_index =[input_x,input_y]
 score=[0 for _ in range(p+1)]
 shocked_santa=[0 for _ in range(p+1)]
+fail_santa=[]
 
 for i in range(p):
     santa_n, x, y = map(int,s.readline().split())
@@ -69,6 +70,8 @@ def move_deer():
         game_table[min_move_x][min_move_y]=0
         _x = min_move_x+ (dx[move_direction]*c)
         _y = min_move_y+ (dy[move_direction]*c)
+        if (is_out_range(_x, _y)):
+            fail_santa.append(santa_num)
         if(not is_out_range(_x, _y)): 
         #탈락이 아니라면. 탈락이면 game_table에 기록 안함.
         #산타가 밀려났는데 그 자리에 산타가 있었다면 ? 상호작용
@@ -107,10 +110,12 @@ def move_santa(cur_p):
     dy=[0,1,0,-1]
     for i in range(1, n+1):
         for j in range(1, n+1):
-            min_distance=100
             min_distance_x, min_distance_y=0,0
             if (game_table[i][j] == cur_p):
                 #p번 산타 (1부터 순서대로)
+                #루돌프와의 원래 거리
+                now_distance = (deer_x-i)**2 + (deer_y -j) **2
+                min_distance=now_distance
                 move_direction=-1
                 for direction_index in range(4): #상, 우, 하, 좌
                     _x=i+dx[direction_index]
@@ -120,6 +125,7 @@ def move_santa(cur_p):
                     if (game_table[_x][_y] > 0):
                         continue
                     #루돌프에게 가장 가까워질 수 있는 방향 찾아서 그리로 이동
+                    #기존 보다 더 멀어지는 경우만 있을 땐 그냥 이동 안함 
                     num = (deer_x - _x)**2 + (deer_y - _y)**2
                     if (num < min_distance):
                         min_distance= num
@@ -142,6 +148,8 @@ def move_santa(cur_p):
                         if (move_direction >= 2):
                             crash_move_x = min_distance_x + (dx[move_direction-2] * d)
                             crash_move_y = min_distance_y + (dy[move_direction-2] * d)
+                        if (is_out_range(crash_move_x, crash_move_y)):
+                            fail_santa.append(cur_p)
                         if (not is_out_range(crash_move_x, crash_move_y)):    
                             #탈락 아닌경우. 탈락이면 game_table에 기입 안함
                             if (game_table[crash_move_x][crash_move_y] >0):
@@ -163,6 +171,9 @@ def all_santa():
     for i in range(1, p+1):
         if (shocked_santa[i] == 0):
             move_santa(i)
+    #중간에 게임 종료되는 조건
+    if(len(fail_santa) == p):
+        return
     #탈락하지 않고 남은 산타들 +1점
     for i in range(1, n+1):
         for j in range(1, n+1):
@@ -170,11 +181,14 @@ def all_santa():
                 score[game_table[i][j]]+=1
 
 for i in range(m):
+    #중간에 게임 종료되는 조건
+    if(len(fail_santa) == p):
+        break
     #기절한 산타 1 줄여주기
     for s in range(1, p+1):
         if (shocked_santa[s] > 0):
             shocked_santa[s] -=1
     move_deer()
     all_santa()
-
+    
 print(*score[1:])
