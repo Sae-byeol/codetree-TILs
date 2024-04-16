@@ -4,9 +4,6 @@ let n = Number(input[0])
 let nonBlindArr=[]
 let blindArr=Array.from({length: n}, ()=> new Array(n))
 
-let nonBlind=0
-let blind=0
-
 for (let i=1;i<=n;i++){
     nonBlindArr.push(input[i].split(''))
 }
