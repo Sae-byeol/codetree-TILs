@@ -10,6 +10,7 @@ let visited = new Array(n+1).fill(0)
 for (let i=1; i<=m; i++){
     const [node1, node2] = input[i].split(' ').map((n)=> Number(n));
     graph[node1].push(node2);
+    graph[node2].push(node1);
 }
 //그래프 각 원소 배열 정렬
 for (let i=1; i<=n;i++){
@@ -34,6 +35,7 @@ function bfs(){
     //dfs에서 건든 visited 초기화
     visited.forEach((v, i) => visited[i] =0)
     let queue =[start_node]
+    visited[start_node] =1
     while (queue.length > 0){
         let cur = queue.shift()
         bfsAnswer.push(cur)
