@@ -38,5 +38,6 @@ function bfs(){
             }
         }
     }
+    return 0
 }
 console.log(bfs())
