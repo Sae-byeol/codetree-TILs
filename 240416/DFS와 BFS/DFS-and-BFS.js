@@ -31,12 +31,18 @@ function dfs(node){
 
 
 function bfs(){
+    //dfs에서 건든 visited 초기화
+    visited.forEach((v, i) => visited[i] =0)
     let queue =[start_node]
     while (queue.length > 0){
         let cur = queue.shift()
         bfsAnswer.push(cur)
         for (let i=0;i<graph[cur].length ; i++){
-            queue.push(graph[cur][i])
+            //아직 방문 안했다면(큐에 없다면)
+            if (visited[graph[cur][i]] == 0){
+                visited[graph[cur][i]] =1
+                queue.push(graph[cur][i])
+            }
         }
     }
 }
